@@ -3,25 +3,28 @@ Gravity Waves Research
 
 Create Images of DNB Data.
 
-Modified: 2022/03
+By Katherine Haynes
+Edited by Lander Ver Hoef
+
+Modified: 2022/09
 """
 
 # %%
 # Import libraries
 import numpy as np
+import os
 import functions_map as kfm
 from math import erf, sqrt
 from functions_viirs import read_dnb_sdr, read_GDNBO
 from functions_util import checkNaN, find_index_of_nearest_xy
 from functions_util import scale_eds
-from var_opts import case20200424 as caseDict
+from var_opts import bore20180513_02 as caseDict
 from var_opts import caseOpts
 
 
 # %%
 # User Options
-# dirname = '/Users/kdhaynes/Data/cira/gravity_waves/images_class/'
-dirData = '/mnt/data1/kdhaynes/gravity_waves/dnb_data/GravityWaves/'
+dirData = 'D:/research/gravity_waves_data/'
 
 scale_method = 'log'  # 'eds' or 'log' or 'custom'
 
@@ -53,8 +56,7 @@ lon = None
 dataMeta = None
 fileList = caseDict['fileList']
 for filename in fileList:
-    fName = dirData + caseDict['filePrefix'] + \
-        filename + caseDict['fileSuffix']
+    fName = dirData + caseDict['filePrefix'] + filename + caseDict['fileSuffix']
     dataT = read_dnb_sdr(fName, allow_qf=list(range(256)))
     (lonT, latT, dataMetaT) = read_GDNBO(
         fName, return_pos=True, return_lunar=True)
@@ -82,6 +84,7 @@ for filename in fileList:
             arrOld = dataMeta[key]
             arrNew = dataMetaT[key]
             dataMeta[key] = np.concatenate((arrOld, arrNew), axis=0)
+del dataT
 
 dataGoodRef = np.where(data >= 0.)
 dataGoodRef0 = np.where(data > 0.)
@@ -138,6 +141,7 @@ elif scale_method == 'log':
     print("Log Min={:.2f} and Max={:.2f}".format(
         np.min(radLog[dataGoodRef0]), np.max(radLog[dataGoodRef0])))
     radTemp = radLog
+    del radLog
 
     minval = -10.25
     maxval = -8.75
@@ -154,7 +158,7 @@ elif scale_method == 'custom':
 else:
     print("Invalid scale_method: {}".format(scale_method))
     print("   Please change to eds, log, or custom.")
-
+del data
 
 # %%
 # Scale data
@@ -163,6 +167,7 @@ radTemp = np.where(radTemp < 0., 0., radTemp)
 radTemp = radTemp ** (1. / rootbase)  # np.sqrt(radTemp)
 
 radiance = radTemp
+del radTemp
 radMax = np.max(radiance)
 radMin = np.min(radiance)
 radScaled = np.where(radiance > 1.0, 1.0, radiance)
@@ -232,6 +237,7 @@ if imageSquareLocation:
     else:
         saveFile = ''
     kfm.image_labels_with_square(radScaledH, xRefList, yRefList, squareSize,
+                                 imLocLatStart, imLocLonStart,
                                  cmap=cmap, cvmin=cvmin, cvmax=cvmax,
                                  saveFile=saveFile)
 

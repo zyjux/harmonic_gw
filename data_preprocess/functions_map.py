@@ -2,7 +2,8 @@
 Common mapping routines.
 
 Katherine Haynes
-Modified: 2022/02
+Edited by Lander Ver Hoef
+Modified: 2022/09
 """
 
 # %%
@@ -12,10 +13,30 @@ import cartopy.feature as cfeature
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import ticker
+import matplotlib.patches as patches
 
 
 # %%
 DEFAULT_COLOR_LIST = ['red', 'blue', 'green', 'orange']
+
+
+# %%
+# Plot interactivity functions
+def print_click_xy(event):
+    print(f'x: {event.xdata} and y: {event.ydata}')
+
+
+def print_imloc_click_xy(fig, ax, event, imLocLatStart, imLocLonStart, squareSize):
+    print(f'x: {event.xdata + imLocLonStart} and y: {event.ydata + imLocLatStart}')
+    rect = patches.Rectangle(
+        (event.xdata, event.ydata),
+        squareSize,
+        squareSize,
+        edgecolor='cyan',
+        facecolor=None
+    )
+    ax.add_patch(rect)
+    fig.canvas.draw()
 
 
 # %%
@@ -74,12 +95,14 @@ def image_labels(data,
     if saveFile:
         save_figure(saveFile, plt)
     else:
+        cid = fig.canvas.mpl_connect('button_press_event', print_click_xy)
         plt.show()
     plt.close()
     return
 
 
 def image_labels_with_square(labels, xRefList, yRefList, squareSize,
+                             imLocLatStart=None, imLocLonStart=None,
                              colorList=DEFAULT_COLOR_LIST,
                              cmap='gray', cvmin=None, cvmax=None,
                              figSize=(12, 6),
@@ -115,6 +138,8 @@ def image_labels_with_square(labels, xRefList, yRefList, squareSize,
     if saveFile:
         save_figure(saveFile, plt)
     else:
+        cid = fig.canvas.mpl_connect('button_press_event',
+            lambda event: print_imloc_click_xy(fig, ax, event, imLocLatStart, imLocLonStart, squareSize))
         plt.show()
     plt.close()
     return

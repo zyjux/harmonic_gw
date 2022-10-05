@@ -24,7 +24,7 @@ from var_opts import caseOpts
 
 # %%
 # User Options
-dirData = 'D:/research/gravity_waves_data/'
+dirData = 'E:/research_data/2022_harmonic_gravity_waves/'
 
 scale_method = 'log'  # 'eds' or 'log' or 'custom'
 
@@ -61,6 +61,8 @@ for filename in fileList:
     (lonT, latT, dataMetaT) = read_GDNBO(
         fName, return_pos=True, return_lunar=True)
     dataT = checkNaN(dataT)
+
+    print((lonT, latT))
 
     if data is None:
         data = dataT

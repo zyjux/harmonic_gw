@@ -22,7 +22,7 @@ from functions_util import checkNaN, find_index_of_nearest_xy
 from functions_util import scale_eds
 from var_opts import caseOpts
 import var_opts
-# from var_opts import bore20180513_02 as caseDict
+import gc
 
 caseList = [
     'bore20180114',
@@ -43,6 +43,52 @@ caseList = [
     'bore20180513_01',
     'bore20180513_02',
     # 'bore20200424'
+    'bore20180519_01',
+    'bore20180519_02',
+    'bore20180519_03',
+    'bore20180715',
+    'bore20180808_01',
+    'bore20180808_02',
+    'bore20180813_01',
+    'bore20180813_02',
+    'bore20180813_03',
+    'bore20180815_01',
+    'bore20180815_02',
+    'bore20181010_01',
+    'bore20181010_02',
+    'bore20181010_03',
+    'bore20181010_04',
+    'bore20181011_01',
+    'bore20181011_02',
+    'bore20181203_01',
+    'bore20181203_02',
+    'bore20181203_03',
+    'bore20190531_01',
+    'bore20190531_02',
+    'bore20190609_01',
+    'bore20190609_02',
+    'bore20190609_03',
+    'bore20190609_04',
+    'bore20190609_05',
+    'bore20190628_01',
+    'bore20190628_02',
+    'bore20190702_01',
+    'bore20190702_02',
+    'bore20190704_01',
+    'bore20190704_02',
+    'bore20190706_01',
+    'bore20190706_02',
+    'bore20190706_03',
+    'bore20190730_01',
+    'bore20190730_02',
+    'bore20190730_03',
+    'bore20200320_01',
+    'bore20200320_02',
+    'bore20200324',
+    'bore20200424_01',
+    'bore20200424_02',
+    'bore20200616_01',
+    'bore20200616_02',
 ]
 
 # %%
@@ -53,7 +99,7 @@ nc_savefn = 'E:/research_data/2022_harmonic_gravity_waves/preprocessed_images/bo
 scale_method = 'log'  # 'eds' or 'log' or 'custom'
 
 ds = None
-    
+
 for case in caseList:
 
     caseDict = getattr(var_opts, case)
@@ -71,7 +117,7 @@ for case in caseList:
         (lonT, latT, dataMetaT) = read_GDNBO(
             fName, return_pos=True, return_lunar=True)
         dataMetaT['datetime'] = [pd.to_datetime(filename[0:17], format="d%Y%m%d_t%H%M%S")]
-            
+
         dataT = checkNaN(dataT)
 
         if data is None:
@@ -97,9 +143,13 @@ for case in caseList:
                 arrNew = dataMetaT[key]
                 dataMeta[key] = np.concatenate((arrOld, arrNew), axis=0)
     del dataT
+    del lonT
+    del latT
+    del dataMetaT
 
     dataGoodRef = np.where(data >= 0.)
     dataGoodRef0 = np.where(data > 0.)
+    print(f'Case: ' + case)
     print("Read data and ancillary information.")
     print("   Data shape= {}, min= {:.12f}, max= {:.12f}".format(
         data.shape, data[dataGoodRef].min(), data[dataGoodRef].max()))
@@ -192,8 +242,10 @@ for case in caseList:
     rad255 = radScaled.copy() * 255
     print("0-255 Scaled Radiance Minval= {:.4f} and Maxval= {:.2f}".format(
         np.nanmin(rad255), np.nanmax(rad255)))
-    
-    
+    del radScaled
+    del radiance
+
+
     # %%
     # Create DataArray of data and concatenate into dataset
     case_ds = xr.Dataset(
@@ -219,7 +271,16 @@ for case in caseList:
     )
     if ds is None:
         ds = case_ds
+        ds.to_netcdf(nc_savefn)
     else:
+        ds = xr.open_dataset(nc_savefn)
         ds = xr.concat([ds, case_ds], dim="time")
+        ds.to_netcdf(nc_savefn)
 
-ds.to_netcdf(nc_savefn)
+    del ds
+    del case_ds
+    del rad255
+
+    ds = 1
+
+    gc.collect()

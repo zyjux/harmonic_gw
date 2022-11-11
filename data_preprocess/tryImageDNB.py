@@ -18,9 +18,9 @@ from math import erf, sqrt
 from functions_viirs import read_dnb_sdr, read_GDNBO
 from functions_util import checkNaN, find_index_of_nearest_xy
 from functions_util import scale_eds
-from var_opts import bore20180513_02 as caseDict
 from var_opts import caseOpts
 
+from var_opts import bore20190702_02 as caseDict
 
 # %%
 # User Options
@@ -40,11 +40,11 @@ checkLatLon = False
 cmap = 'gray'
 cvmin = 40
 cvmax = 255
-imageSquareLocation = True
+imageSquareLocation = False
 saveImSqLoc = False
 saveImSqLocFile = '_zoom_squares.png'
 
-imageSquareZoom = True
+imageSquareZoom = False
 saveImSqZoom = False
 
 

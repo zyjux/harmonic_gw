@@ -139,6 +139,8 @@ def read_concat_files(caseDict):
                 arrNew = dataMetaT[key]
                 dataMeta[key] = np.concatenate((arrOld, arrNew), axis=0)
 
+    dataMeta['satellite'] = caseDict['filePrefix'][-4:-1]
+
     return data, lat, lon, dataMeta
 
 
@@ -266,7 +268,8 @@ for i, case in enumerate(caseList):
                     'lunzen',
                     'lunazi',
                 ]
-            }
+            },
+            satellite=(["time"], dataMeta["satellite"])
         ),
         coords=dict(
             lon=(["x", "y", "time"], np.expand_dims(lon, axis=-1)),

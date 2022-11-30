@@ -269,7 +269,7 @@ for i, case in enumerate(caseList):
                     'lunazi',
                 ]
             },
-            satellite=(["time"], dataMeta["satellite"])
+            satellite=(["time"], [dataMeta["satellite"]])
         ),
         coords=dict(
             lon=(["x", "y", "time"], np.expand_dims(lon, axis=-1)),

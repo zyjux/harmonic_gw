@@ -59,12 +59,12 @@ class frt(object):
 
         self.r = np.zeros((self._img.shape[0], len(self.n_vecs)))
         for col, n_vec in enumerate(self.n_vecs):
-            for i in range(self.p):
-                if n_vec[1] == 0:
-                    self.r[:, col] = np.sum(self._img, axis=0)
-                else:
-                    x_step = n_vec[1]
-                    y_step = -n_vec[0]
+            if n_vec[1] == 0:
+                self.r[:, col] = np.sum(self._img, axis=0)
+            else:
+                x_step = n_vec[1]
+                y_step = -n_vec[0]
+                for i in range(self.p):
                     self.r[:, col] += np.roll(self._img[:, int(i * x_step) % self.p], int(i * y_step) % self.p)
 
         return 1/np.sqrt(self.p) * self.r

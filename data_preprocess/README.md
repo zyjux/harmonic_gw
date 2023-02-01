@@ -2,4 +2,4 @@
 
 Using ML on DNB imagery to detect gravity waves.
 
-The routine tryImageDNB.py will read a case, concatinate the files if necessary, and pull out squares of data with gravity waves.
+Underlying routines were by John Haynes and Kathy Haynes at CIRA Fort Collins.

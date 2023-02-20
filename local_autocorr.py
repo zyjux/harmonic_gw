@@ -64,7 +64,7 @@ for fn in fn_list:
         
     auto_corr_im = local_auto_corr(img, square_size)
     
-    sav_fn = img_dir + "auto_corr_ims/" + re.search("d\d.+(?=_log)", fn).group() + "_auto_corr_im.jpg"
+    sav_fn = img_dir + "auto_corr_ims/" + re.search("\d{4}-\d{2}-\d{2}.*(?=_..._log)", fn).group() + "_auto_corr_im.jpg"
     
     F = plt.Figure()
     ax = plt.gca()
@@ -73,3 +73,5 @@ for fn in fn_list:
     ax.set_yticks([])
     F.set_facecolor("white")
     plt.savefig(sav_fn, bbox_inches='tight', dpi=400)
+    plt.close()
+    del auto_corr_im

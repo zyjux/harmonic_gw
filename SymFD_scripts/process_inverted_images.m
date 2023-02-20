@@ -1,4 +1,4 @@
-files = dir('E:\research_data\2022_harmonic_gravity_waves\preprocessed_images\full_ims\2018-05-13T17-16*.png');
+files = dir('E:\research_data\2022_harmonic_gravity_waves\preprocessed_images\inverted_full_ims\*.png');
 
 for i=1:length(files)
     %% select and load image
@@ -50,9 +50,7 @@ for i=1:length(files)
     
     
     printOptions.exportType = 'png';
-    cmap = parula(256);
-    featureMap256 = featureMap*256;
-    saveFn = ['E:\research_data\2022_harmonic_gravity_waves\preprocessed_images\SymFD_output\ridge_detection', files(i).name];
-    imwrite(featureMap256, cmap, saveFn);
+    saveFn = ['E:\research_data\2022_harmonic_gravity_waves\preprocessed_images\SymFD_output\inverted_ridge_detection', files(i).name];
+    imwrite(featureMap, saveFn);
     % SFDexportMap(featureMap, 'auto', 'feature', saveFn, 'Input', printOptions);
 end

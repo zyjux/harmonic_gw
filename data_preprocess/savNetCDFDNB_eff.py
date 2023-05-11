@@ -14,7 +14,6 @@ Modified: 2022/09
 import numpy as np
 import xarray as xr
 import pandas as pd
-import os
 import functions_map as kfm
 from math import erf, sqrt
 from functions_viirs import read_dnb_sdr, read_GDNBO
@@ -23,6 +22,7 @@ from functions_util import scale_eds
 from var_opts import caseOpts
 import var_opts
 import gc
+from pathlib import Path
 
 caseList = [
     'bore20180114',
@@ -97,9 +97,13 @@ caseList = [
 # nc_savefn = 'E:/research_data/2022_harmonic_gravity_waves/preprocessed_images/bore_ex.nc'
 # zarr_savefn = 'E:/research_data/2022_harmonic_gravity_waves/preprocessed_images/bore_ex.zarr'
 ### MacOS settings
-dirData = '/Users/verhoef/data/GravityWaves/raw_data/'
-nc_savefn = '/Users/verhoef/data/GravityWaves/preprocessed_images/bore_ex.nc'
-zarr_savefn = '/Users/verhoef/data/GravityWaves/preprocessed_images/bore_ex.zarr'
+# dirData = '/Users/verhoef/data/GravityWaves/raw_data/'
+# nc_savefn = '/Users/verhoef/data/GravityWaves/preprocessed_images/bore_ex.nc'
+# zarr_savefn = '/Users/verhoef/data/GravityWaves/preprocessed_images/bore_ex.zarr'
+
+dirData = Path.home() / 'research_data/GravityWaves'
+raw_data = dirData / 'raw_data'
+nc_savefn = wd / 'preprocessed_images/bore_ex.nc'
 
 scale_method = 'log'  # 'eds' or 'log' or 'custom'
 
@@ -113,7 +117,7 @@ def read_concat_files(caseDict):
     dataMeta = None
     fileList = caseDict['fileList']
     for filename in fileList:
-        fName = dirData + caseDict['filePrefix'] + filename + caseDict['fileSuffix']
+        fName = raw_data / (caseDict['filePrefix'] + filename + caseDict['fileSuffix'])
         dataT = read_dnb_sdr(fName, allow_qf=list(range(256)))
         (lonT, latT, dataMetaT) = read_GDNBO(
             fName, return_pos=True, return_lunar=True)

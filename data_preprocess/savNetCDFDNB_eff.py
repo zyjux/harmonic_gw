@@ -92,9 +92,14 @@ caseList = [
 
 # %%
 # User Options
-dirData = 'E:/research_data/2022_harmonic_gravity_waves/'
-nc_savefn = 'E:/research_data/2022_harmonic_gravity_waves/preprocessed_images/bore_ex.nc'
-zarr_savefn = 'E:/research_data/2022_harmonic_gravity_waves/preprocessed_images/bore_ex.zarr'
+#### Windows settings
+# dirData = 'E:/research_data/2022_harmonic_gravity_waves/'
+# nc_savefn = 'E:/research_data/2022_harmonic_gravity_waves/preprocessed_images/bore_ex.nc'
+# zarr_savefn = 'E:/research_data/2022_harmonic_gravity_waves/preprocessed_images/bore_ex.zarr'
+### MacOS settings
+dirData = '/Users/verhoef/data/GravityWaves/raw_data/'
+nc_savefn = '/Users/verhoef/data/GravityWaves/preprocessed_images/bore_ex.nc'
+zarr_savefn = '/Users/verhoef/data/GravityWaves/preprocessed_images/bore_ex.zarr'
 
 scale_method = 'log'  # 'eds' or 'log' or 'custom'
 
